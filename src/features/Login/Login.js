@@ -1,7 +1,6 @@
 import React from "react";
 import { SpotifyAuth, Scopes } from "react-spotify-auth";
 import "react-spotify-auth/dist/index.css"; // if using the included styles
-import Cookies from "js-cookie";
 
 const Login = () => {
   const credentials = {

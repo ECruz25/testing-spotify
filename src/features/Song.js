@@ -5,7 +5,6 @@ import CardActionArea from "@material-ui/core/CardActionArea";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import { IconButton } from "@material-ui/core";
@@ -53,9 +52,11 @@ const Song = ({ song, album }) => {
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="share">
-            <AddCircleOutline />
-          </IconButton>
+          <CardActionArea>
+            <IconButton aria-label="share">
+              <AddCircleOutline />
+            </IconButton>
+          </CardActionArea>
         </CardActions>
       </Card>
     </div>
