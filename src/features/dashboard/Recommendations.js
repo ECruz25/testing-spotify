@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowseRecommendations, AlbumTracks } from "react-spotify-api";
+import { BrowseRecommendations } from "react-spotify-api";
 import Song from "../Song";
 
 const Featured = () => {
