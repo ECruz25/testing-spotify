@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { BrowseNew, AlbumTracks } from "react-spotify-api";
 import Song from "../../components/Song";
 import { selectSongs } from "./dashboardSlice";
+import Alert from "../../components/Alert";
 
 const NewReleases = ({ addSong }) => {
   const songs = useSelector(selectSongs);
@@ -27,24 +28,33 @@ const NewReleases = ({ addSong }) => {
               albums.data &&
               albums.data.albums &&
               albums.data.albums.items.map((album) => (
-                <AlbumTracks id={album.id} key={album.id}>
-                  {(tracks) => {
-                    return (
-                      tracks &&
-                      tracks.data &&
-                      tracks.data.items &&
-                      tracks.data.items.map((track) => (
-                        <Song
-                          song={track}
-                          album={album}
-                          addSong={addSong}
-                          key={track.id}
-                          songs={songs}
-                        />
-                      ))
-                    );
-                  }}
-                </AlbumTracks>
+                <>
+                  <AlbumTracks id={album.id} key={album.id}>
+                    {(tracks) => {
+                      return (
+                        tracks &&
+                        tracks.data &&
+                        tracks.data.items &&
+                        tracks.data.items.map((track) => (
+                          <Song
+                            song={track}
+                            album={album}
+                            addSong={addSong}
+                            key={track.id}
+                            songs={songs}
+                          />
+                        ))
+                      );
+                    }}
+                  </AlbumTracks>
+                  {albums.data.error && (
+                    <Alert
+                      isOpen
+                      type="error"
+                      message={albums.data.error.message}
+                    ></Alert>
+                  )}
+                </>
               ))
             );
           }}

@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SpotifyApiContext } from "react-spotify-api";
 import { ThemeProvider } from "@material-ui/core/styles";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import { createMuiTheme, CssBaseline } from "@material-ui/core";
 import { Search } from "react-spotify-api";
 import Cookies from "js-cookie";
@@ -13,6 +18,8 @@ import AppBar from "./components/AppBar";
 import "./App.css";
 import RedirectC from "./components/Redirect";
 import Alert from "./components/Alert";
+import { useDispatch } from "react-redux";
+import { resetState } from "./features/dashboard/dashboardSlice";
 
 const theme = createMuiTheme({
   spacing: 4,
@@ -28,7 +35,8 @@ const theme = createMuiTheme({
 function App() {
   const [searchKeyWord, setSearchKeyWord] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const token = Cookies.get("spotifyAuthToken");
+  const [token, setToken] = useState();
+  const dispatch = useDispatch();
 
   const searchByKeyWord = (keyword) => {
     setSearchKeyWord(keyword);
@@ -43,7 +51,14 @@ function App() {
 
   const logout = () => {
     Cookies.remove("spotifyAuthToken");
+    setToken();
+    dispatch(resetState());
   };
+
+  useEffect(() => {
+    const tokenCookie = Cookies.get("spotifyAuthToken");
+    setToken(tokenCookie);
+  });
 
   return (
     <ThemeProvider theme={theme}>
@@ -52,18 +67,29 @@ function App() {
         <Router>
           {token ? (
             <SpotifyApiContext.Provider value={token}>
-              <AppBar searchByKeyWord={searchByKeyWord} />
+              <AppBar searchByKeyWord={searchByKeyWord} logout={logout} />
               {isSearching && (
                 <Search query={searchKeyWord} track options={{ limit: 10 }}>
-                  {(data) =>
-                    data && (
-                      <SearchModal
-                        closeModal={cancelSearch}
-                        open={isSearching}
-                        data={data}
-                      />
-                    )
-                  }
+                  {(data) => {
+                    return (
+                      data && (
+                        <>
+                          <SearchModal
+                            closeModal={cancelSearch}
+                            open={isSearching}
+                            data={data}
+                          />
+                          {data.error && (
+                            <Alert
+                              isOpen
+                              type="error"
+                              message={data.error.message}
+                            ></Alert>
+                          )}
+                        </>
+                      )
+                    );
+                  }}
                 </Search>
               )}
               <Switch>
@@ -71,7 +97,7 @@ function App() {
                   <Dashboard />
                 </Route>
                 <Route path="/callback" exact>
-                  <RedirectC />
+                  <Redirect to="/" />
                 </Route>
               </Switch>
             </SpotifyApiContext.Provider>
@@ -79,7 +105,6 @@ function App() {
             <Login />
           )}
         </Router>
-        <Alert severity="error">This is an error message!</Alert>
       </div>
     </ThemeProvider>
   );

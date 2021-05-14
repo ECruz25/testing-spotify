@@ -33,31 +33,30 @@ function DataTable({ data, songs }) {
       dispatch(addSong(row));
     }
   };
-  debugger;
   return (
     <TableContainer className={classes.table}>
       <Table size="small" aria-label="a dense table" stickyHeader>
         <TableHead>
           <TableRow>
-            <TableCell></TableCell>
-            <TableCell>Name</TableCell>
-            <TableCell>Album</TableCell>
-            <TableCell>Duration</TableCell>
-            <TableCell>Actions</TableCell>
+            <TableCell style={{ width: 60 }}>🎵</TableCell>
+            <TableCell style={{ width: "50%" }}>Name</TableCell>
+            <TableCell style={{ width: "50%" }}>Album</TableCell>
+            <TableCell style={{ width: 50 }}>Duration</TableCell>
+            <TableCell style={{ width: 50 }}>Actions</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((row) => (
             <TableRow key={row.id} hover>
-              <TableCell>
+              <TableCell style={{ width: 60 }}>
                 <Avatar alt={row.album.name} src={row.album.images[0].url} />
               </TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.album.name}</TableCell>
-              <TableCell>
+              <TableCell style={{ width: "50%" }}>{row.name}</TableCell>
+              <TableCell style={{ width: "50%" }}>{row.album.name}</TableCell>
+              <TableCell style={{ width: 50 }}>
                 {millisToMinutesAndSeconds(row.duration_ms)}
               </TableCell>
-              <TableCell>
+              <TableCell style={{ width: 50 }}>
                 <IconButton aria-label="share" onClick={() => songAction(row)}>
                   {songActionButton(songs, row)}
                 </IconButton>

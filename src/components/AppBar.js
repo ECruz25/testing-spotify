@@ -15,6 +15,8 @@ import NotificationsIcon from "@material-ui/icons/Notifications";
 import { User } from "react-spotify-api";
 import { yellow } from "@material-ui/core/colors";
 import { Avatar } from "@material-ui/core";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import Tooltip from "@material-ui/core/Tooltip";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -80,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar({ searchByKeyWord }) {
+export default function PrimarySearchAppBar({ searchByKeyWord, logout }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -217,6 +219,15 @@ export default function PrimarySearchAppBar({ searchByKeyWord }) {
             My Library
           </Typography>
           <div className={classes.grow} />
+          <Tooltip title="LogOut">
+            <IconButton
+              aria-label="show 4 new mails"
+              color="inherit"
+              onClick={logout}
+            >
+              <ExitToAppIcon />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}

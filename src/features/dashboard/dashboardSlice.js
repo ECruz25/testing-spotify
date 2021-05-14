@@ -35,17 +35,18 @@ export const dashboardSlice = createSlice({
     setSongs: (state, { payload }) => {
       state.songs = payload;
     },
+    resetState: (state) => {
+      state.songs = [];
+      state.user = "";
+    },
   },
 });
 
-export const {
-  addSong,
-  setUser,
-  setSongs,
-  removeSong,
-} = dashboardSlice.actions;
+export const { addSong, setUser, setSongs, removeSong, resetState } =
+  dashboardSlice.actions;
 
 export const selectSongs = (state) => state.myLibrary.songs;
 export const selectUser = (state) => state.myLibrary.user;
+export const selectError = (state) => state.myLibrary.error;
 
 export default dashboardSlice.reducer;
