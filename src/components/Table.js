@@ -7,7 +7,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-import { IconButton } from "@material-ui/core";
+import { Avatar, IconButton } from "@material-ui/core";
 import { AddCircleOutline, DeleteForeverOutlined } from "@material-ui/icons";
 import { useDispatch } from "react-redux";
 import { addSong, removeSong } from "../features/dashboard/dashboardSlice";
@@ -35,12 +35,13 @@ function DataTable({ data, songs }) {
       dispatch(addSong(row));
     }
   };
-
+  debugger;
   return (
     <TableContainer className={classes.table}>
       <Table size="small" aria-label="a dense table" stickyHeader>
         <TableHead>
           <TableRow>
+            <TableCell></TableCell>
             <TableCell>Name</TableCell>
             <TableCell>Album</TableCell>
             <TableCell>Duration</TableCell>
@@ -50,6 +51,9 @@ function DataTable({ data, songs }) {
         <TableBody>
           {data.map((row) => (
             <TableRow key={row.id} hover>
+              <TableCell>
+                <Avatar alt={row.album.name} src={row.album.images[0].url} />
+              </TableCell>
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.album.name}</TableCell>
               <TableCell>

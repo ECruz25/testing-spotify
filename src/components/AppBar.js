@@ -182,7 +182,10 @@ export default function PrimarySearchAppBar({ searchByKeyWord }) {
               {(user, loading, error) => {
                 if (user.data && user.data.images.length > 0) {
                   return (
-                    <Avatar alt="Remy Sharp" src={user.data.images[0].url} />
+                    <Avatar
+                      alt={user.data.name}
+                      src={user.data.images[0].url}
+                    />
                   );
                 }
                 return (
