@@ -12,6 +12,7 @@ import AppBar from "./components/AppBar";
 
 import "./App.css";
 import RedirectC from "./components/Redirect";
+import Alert from "./components/Alert";
 
 const theme = createMuiTheme({
   spacing: 4,
@@ -40,6 +41,10 @@ function App() {
     setIsSearching(false);
   };
 
+  const logout = () => {
+    Cookies.remove("spotifyAuthToken");
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -48,7 +53,7 @@ function App() {
           {token ? (
             <SpotifyApiContext.Provider value={token}>
               <AppBar searchByKeyWord={searchByKeyWord} />
-              {isSearching ? (
+              {isSearching && (
                 <Search query={searchKeyWord} track options={{ limit: 10 }}>
                   {(data) =>
                     data && (
@@ -60,21 +65,21 @@ function App() {
                     )
                   }
                 </Search>
-              ) : (
-                <Switch>
-                  <Route path="/" exact>
-                    <Dashboard />
-                  </Route>
-                  <Route path="/callback" exact>
-                    <RedirectC />
-                  </Route>
-                </Switch>
               )}
+              <Switch>
+                <Route path="/" exact>
+                  <Dashboard />
+                </Route>
+                <Route path="/callback" exact>
+                  <RedirectC />
+                </Route>
+              </Switch>
             </SpotifyApiContext.Provider>
           ) : (
             <Login />
           )}
         </Router>
+        <Alert severity="error">This is an error message!</Alert>
       </div>
     </ThemeProvider>
   );

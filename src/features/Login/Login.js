@@ -7,7 +7,6 @@ const Login = () => {
     client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
     redirect: process.env.REACT_APP_REDIRECT,
   };
-  debugger;
   return (
     <div style={{}}>
       <div
