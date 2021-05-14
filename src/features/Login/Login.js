@@ -7,11 +7,26 @@ const Login = () => {
     client_id: process.env.REACT_APP_SPOTIFY_CLIENT_ID,
   };
   return (
-    <SpotifyAuth
-      redirectUri="http://localhost:3000/callback"
-      clientID={credentials.client_id}
-      scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
-    />
+    <div style={{}}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          position: "absolute",
+          top: 0,
+          right: 0,
+          bottom: 0,
+          left: 0,
+        }}
+      >
+        <SpotifyAuth
+          redirectUri={process.env.REACT_APP_REDIRECT}
+          clientID={credentials.client_id}
+          scopes={[Scopes.userReadPrivate, Scopes.userReadEmail]}
+        />
+      </div>
+    </div>
   );
 };
 

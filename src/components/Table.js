@@ -11,12 +11,16 @@ import { IconButton } from "@material-ui/core";
 import { AddCircleOutline, DeleteForeverOutlined } from "@material-ui/icons";
 import { useDispatch } from "react-redux";
 import { addSong, removeSong } from "../features/dashboard/dashboardSlice";
-import { checkIfSongAlreadyInList, millisToMinutesAndSeconds } from "../utils";
+import {
+  checkIfSongAlreadyInList,
+  millisToMinutesAndSeconds,
+  songActionButton,
+} from "../utils";
 
 const useStyles = makeStyles((theme) => ({
   table: {
     minWidth: 450,
-    maxHeight: 200,
+    maxHeight: 500,
   },
 }));
 
@@ -32,22 +36,9 @@ function DataTable({ data, songs }) {
     }
   };
 
-  const songActionButton = (row) => {
-    if (checkIfSongAlreadyInList(songs, row)) {
-      return <DeleteForeverOutlined />;
-    } else {
-      return <AddCircleOutline />;
-    }
-  };
-
   return (
-    <TableContainer component={Paper}>
-      <Table
-        className={classes.table}
-        size="small"
-        aria-label="a dense table"
-        stickyHeader
-      >
+    <TableContainer className={classes.table}>
+      <Table size="small" aria-label="a dense table" stickyHeader>
         <TableHead>
           <TableRow>
             <TableCell>Name</TableCell>
@@ -58,7 +49,7 @@ function DataTable({ data, songs }) {
         </TableHead>
         <TableBody>
           {data.map((row) => (
-            <TableRow key={row.id}>
+            <TableRow key={row.id} hover>
               <TableCell>{row.name}</TableCell>
               <TableCell>{row.album.name}</TableCell>
               <TableCell>
@@ -66,7 +57,7 @@ function DataTable({ data, songs }) {
               </TableCell>
               <TableCell>
                 <IconButton aria-label="share" onClick={() => songAction(row)}>
-                  {songActionButton(row)}
+                  {songActionButton(songs, row)}
                 </IconButton>
               </TableCell>
             </TableRow>

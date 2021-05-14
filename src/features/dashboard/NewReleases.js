@@ -1,8 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { BrowseNew, AlbumTracks } from "react-spotify-api";
 import Song from "../../components/Song";
+import { selectSongs } from "./dashboardSlice";
 
 const NewReleases = ({ addSong }) => {
+  const songs = useSelector(selectSongs);
   return (
     <div className="noscroll">
       <h2>New Releases</h2>
@@ -36,6 +39,7 @@ const NewReleases = ({ addSong }) => {
                           album={album}
                           addSong={addSong}
                           key={track.id}
+                          songs={songs}
                         />
                       ))
                     );

@@ -9,14 +9,18 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import { IconButton } from "@material-ui/core";
 import { AddCircleOutline } from "@material-ui/icons";
-import { shortenSongName } from "../utils";
+import {
+  checkIfSongAlreadyInList,
+  shortenSongName,
+  songActionButton,
+} from "../utils";
 import { useDispatch } from "react-redux";
-import { addSong } from "../features/dashboard/dashboardSlice";
+import { addSong, removeSong } from "../features/dashboard/dashboardSlice";
 
 const useStyles = makeStyles({
   root: {
     width: 150,
-    height: 250,
+    height: 232,
     marginRight: 40,
     fontSize: 12,
   },
@@ -33,11 +37,22 @@ const useStyles = makeStyles({
     display: "block",
     padding: 0,
   },
+  button: {
+    padding: 3,
+  },
 });
 
-const Song = ({ song, album }) => {
+const Song = ({ song, album, songs }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+
+  const songAction = (song) => {
+    if (checkIfSongAlreadyInList(songs, song)) {
+      dispatch(removeSong(song.id));
+    } else {
+      dispatch(addSong(song));
+    }
+  };
 
   return (
     <div key={song.id}>
@@ -48,10 +63,10 @@ const Song = ({ song, album }) => {
           title={album.name}
         />
         <CardContent className={classes.content}>
-          <div style={{ height: 35, padding: 0 }}>
+          <div style={{ height: 25, padding: 0 }}>
             <Tooltip title={song.name}>
               <Typography variant="caption" component="p">
-                {shortenSongName(song.name, 35)}
+                {shortenSongName(song.name, 20)}
               </Typography>
             </Tooltip>
           </div>
@@ -68,9 +83,10 @@ const Song = ({ song, album }) => {
         <CardActions className={classes.actions}>
           <IconButton
             aria-label="share"
-            onClick={() => dispatch(addSong({ ...song, album }))}
+            onClick={() => songAction({ ...song, album })}
+            className={classes.button}
           >
-            <AddCircleOutline />
+            {songActionButton(songs, song)}
           </IconButton>
         </CardActions>
       </Card>

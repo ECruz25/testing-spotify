@@ -14,6 +14,7 @@ import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import { User } from "react-spotify-api";
 import { yellow } from "@material-ui/core/colors";
+import { Avatar } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -179,6 +180,11 @@ export default function PrimarySearchAppBar({ searchByKeyWord }) {
           <div className={classes.sectionDesktop}>
             <User>
               {(user, loading, error) => {
+                if (user.data && user.data.images.length > 0) {
+                  return (
+                    <Avatar alt="Remy Sharp" src={user.data.images[0].url} />
+                  );
+                }
                 return (
                   <AccountCircle
                     style={{
