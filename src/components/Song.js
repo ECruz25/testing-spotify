@@ -9,11 +9,14 @@ import Typography from "@material-ui/core/Typography";
 import Tooltip from "@material-ui/core/Tooltip";
 import { IconButton } from "@material-ui/core";
 import { AddCircleOutline } from "@material-ui/icons";
+import { shortenSongName } from "../utils";
+import { useDispatch } from "react-redux";
+import { addSong } from "../features/dashboard/dashboardSlice";
 
 const useStyles = makeStyles({
   root: {
     width: 150,
-    height: 300,
+    height: 250,
     marginRight: 40,
     fontSize: 12,
   },
@@ -23,13 +26,18 @@ const useStyles = makeStyles({
   albumName: {
     fontWeight: "bold",
   },
+  content: {
+    padding: 5,
+  },
+  actions: {
+    display: "block",
+    padding: 0,
+  },
 });
 
 const Song = ({ song, album }) => {
   const classes = useStyles();
-
-  const shortenSongName = (name, length) =>
-    name.length > length ? name.substring(0, length) + "..." : name;
+  const dispatch = useDispatch();
 
   return (
     <div key={song.id}>
@@ -37,26 +45,33 @@ const Song = ({ song, album }) => {
         <CardMedia
           className={classes.media}
           image={album.images && album.images[0].url}
-          title="Contemplative Reptile"
+          title={album.name}
         />
-        <CardContent>
-          <div style={{ height: 40 }}>
+        <CardContent className={classes.content}>
+          <div style={{ height: 35, padding: 0 }}>
             <Tooltip title={song.name}>
-              <Typography variant="p" component="p">
+              <Typography variant="caption" component="p">
                 {shortenSongName(song.name, 35)}
               </Typography>
             </Tooltip>
           </div>
-          <Typography variant="p" component="p" className={classes.albumName}>
-            {album.name}
-          </Typography>
+          <Tooltip title={album.name}>
+            <Typography
+              variant="caption"
+              component="p"
+              className={classes.albumName}
+            >
+              {shortenSongName(album.name, 15)}
+            </Typography>
+          </Tooltip>
         </CardContent>
-        <CardActions disableSpacing>
-          <CardActionArea>
-            <IconButton aria-label="share">
-              <AddCircleOutline />
-            </IconButton>
-          </CardActionArea>
+        <CardActions className={classes.actions}>
+          <IconButton
+            aria-label="share"
+            onClick={() => dispatch(addSong({ ...song, album }))}
+          >
+            <AddCircleOutline />
+          </IconButton>
         </CardActions>
       </Card>
     </div>
