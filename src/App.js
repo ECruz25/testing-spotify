@@ -16,7 +16,6 @@ import SearchModal from "./features/dashboard/SearchModal";
 import AppBar from "./components/AppBar";
 
 import "./App.css";
-import RedirectC from "./components/Redirect";
 import Alert from "./components/Alert";
 import { useDispatch } from "react-redux";
 import { resetState } from "./features/dashboard/dashboardSlice";
@@ -55,6 +54,7 @@ function App() {
     dispatch(resetState());
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const tokenCookie = Cookies.get("spotifyAuthToken");
     setToken(tokenCookie);
