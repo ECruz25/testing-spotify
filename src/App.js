@@ -1,14 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { SpotifyApiContext, useSearch } from "react-spotify-api";
+import React, { useState } from "react";
+import { SpotifyApiContext } from "react-spotify-api";
+import { ThemeProvider } from "@material-ui/core/styles";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { createMuiTheme, CssBaseline } from "@material-ui/core";
 import { Search } from "react-spotify-api";
-
 import Cookies from "js-cookie";
 import Login from "./features/Login/Login";
 import Dashboard from "./features/dashboard/Dashboard";
-import AppBar from "./features/AppBar";
 import SearchModal from "./features/dashboard/SearchModal";
+import AppBar from "./components/AppBar";
 
 import "./App.css";
+import RedirectC from "./components/Redirect";
+
+const theme = createMuiTheme({
+  spacing: 4,
+  palette: {
+    type: "dark",
+    primary: {
+      main: "#1DB954",
+    },
+  },
+  darkMode: true,
+});
 
 function App() {
   const [searchKeyWord, setSearchKeyWord] = useState("");
@@ -27,28 +41,42 @@ function App() {
   };
 
   return (
-    <div className="App">
-      {token ? (
-        <SpotifyApiContext.Provider value={token}>
-          <AppBar searchByKeyWord={searchByKeyWord} />
-          {isSearching ? (
-            <Search query={searchKeyWord} track options={{ limit: 5 }}>
-              {(data) => (
-                <SearchModal
-                  closeModal={cancelSearch}
-                  open={isSearching}
-                  data={data}
-                />
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <CssBaseline />
+        <Router>
+          {token ? (
+            <SpotifyApiContext.Provider value={token}>
+              <AppBar searchByKeyWord={searchByKeyWord} />
+              {isSearching ? (
+                <Search query={searchKeyWord} track options={{ limit: 10 }}>
+                  {(data) =>
+                    data && (
+                      <SearchModal
+                        closeModal={cancelSearch}
+                        open={isSearching}
+                        data={data}
+                      />
+                    )
+                  }
+                </Search>
+              ) : (
+                <Switch>
+                  <Route path="/" exact>
+                    <Dashboard />
+                  </Route>
+                  <Route path="/callback" exact>
+                    <RedirectC />
+                  </Route>
+                </Switch>
               )}
-            </Search>
+            </SpotifyApiContext.Provider>
           ) : (
-            <Dashboard />
+            <Login />
           )}
-        </SpotifyApiContext.Provider>
-      ) : (
-        <Login />
-      )}
-    </div>
+        </Router>
+      </div>
+    </ThemeProvider>
   );
 }
 
