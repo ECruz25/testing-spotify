@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { fade, makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -14,6 +14,8 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import { User } from "react-spotify-api";
+import { yellow } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -79,13 +81,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({ searchByKeyWord }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
+  const [text, setText] = useState("");
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const onSearchChange = (value) => {
+    setText(value);
+  };
+
+  const handleSearch = (key) => {
+    if (key === "Enter") {
+      searchByKeyWord(text);
+      setText("");
+    }
+  };
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -166,7 +179,21 @@ export default function PrimarySearchAppBar() {
       <AppBar position="static">
         <Toolbar>
           <div className={classes.sectionDesktop}>
-            <AccountCircle />
+            <User>
+              {(user, loading, error) => {
+                debugger;
+                return (
+                  <AccountCircle
+                    style={{
+                      color:
+                        user.data && user.data.product === "premium"
+                          ? yellow[500]
+                          : "white",
+                    }}
+                  />
+                );
+              }}
+            </User>
           </div>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -179,6 +206,9 @@ export default function PrimarySearchAppBar() {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              onChange={({ target }) => onSearchChange(target.value)}
+              onKeyDown={({ key }) => handleSearch(key)}
+              value={text}
             />
           </div>
           <Typography className={classes.title} variant="h6" noWrap>

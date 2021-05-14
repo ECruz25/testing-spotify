@@ -1,7 +1,8 @@
 import React from "react";
 import NewReleases from "./NewReleases";
 
-const Dashboard = () => {
+const Dashboard = ({ data }) => {
+  debugger;
   return (
     <div>
       <NewReleases />
