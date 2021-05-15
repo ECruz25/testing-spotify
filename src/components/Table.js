@@ -17,7 +17,7 @@ import {
 
 const useStyles = makeStyles((theme) => ({
   table: {
-    minWidth: 450,
+    width: "100%",
     maxHeight: 500,
   },
 }));
@@ -47,7 +47,7 @@ function DataTable({ data, songs }) {
         </TableHead>
         <TableBody>
           {data.map((row) => (
-            <TableRow key={row.id} hover>
+            <TableRow hover key={row.id}>
               <TableCell style={{ width: 60 }}>
                 <Avatar alt={row.album.name} src={row.album.images[0].url} />
               </TableCell>
