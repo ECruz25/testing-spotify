@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { BrowseNew, AlbumTracks } from "react-spotify-api";
 import Song from "../../components/Song";
@@ -28,8 +28,8 @@ const NewReleases = ({ addSong }) => {
               albums.data &&
               albums.data.albums &&
               albums.data.albums.items.map((album) => (
-                <>
-                  <AlbumTracks id={album.id} key={album.id}>
+                <Fragment key={album.id}>
+                  <AlbumTracks id={album.id}>
                     {(tracks) => {
                       return (
                         tracks &&
@@ -52,9 +52,10 @@ const NewReleases = ({ addSong }) => {
                       isOpen
                       type="error"
                       message={albums.data.error.message}
+                      key={1}
                     ></Alert>
                   )}
-                </>
+                </Fragment>
               ))
             );
           }}

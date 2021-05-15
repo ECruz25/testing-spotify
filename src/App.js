@@ -37,6 +37,10 @@ function App() {
   const [token, setToken] = useState();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    document.title = process.env.REACT_APP_TITLE;
+  }, []);
+
   const searchByKeyWord = (keyword) => {
     setSearchKeyWord(keyword);
     if (keyword) {
